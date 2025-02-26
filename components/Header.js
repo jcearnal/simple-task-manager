@@ -1,32 +1,53 @@
 import React from 'react';
-import { View, Text, StyleSheet, Platform } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import { Ionicons } from '@expo/vector-icons'; // Import icons for back button
 
 const Header = () => {
+  const navigation = useNavigation();
+  const route = useRoute();
+
+  const isHomeScreen = route.name === 'Home'; // Check if we're on the home screen
+  const headerTitle = isHomeScreen ? 'Task Manager' : 'Task Details'; // Set dynamic title
+
   return (
     <View style={styles.header}>
-      <Text style={styles.title}>Simple React App</Text>
+      {!isHomeScreen && (
+        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+          <Ionicons name="arrow-back" size={24} color="white" />
+        </TouchableOpacity>
+      )}
+      <Text style={styles.title}>{headerTitle}</Text>
     </View>
   );
 };
 
-// Header styles updated for dark mode
 const styles = StyleSheet.create({
   header: {
-    position: 'absolute', // Fix to the top
-    top: 0,
-    left: 0,
-    right: 0,
-    backgroundColor: '#1F1B24', // Darker shade for the header
-    paddingTop: Platform.OS === 'ios' ? 50 : 20, // Adjust for notch
-    paddingBottom: 20, 
+    width: '100%',
+    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    zIndex: 10, 
+    backgroundColor: '#03dac6',
+    paddingTop: 50, // Adjust for iOS notch
+    paddingBottom: 20,
+    paddingHorizontal: 15,
+    elevation: 3, // Android shadow
+    shadowColor: '#000', // iOS shadow
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+  },
+  backButton: {
+    position: 'absolute',
+    left: 15,
+    top: 55, // Adjusted for iOS
+    zIndex: 10,
   },
   title: {
-    color: '#BB86FC', // Purple accent text
     fontSize: 20,
     fontWeight: 'bold',
+    color: 'white',
   },
 });
 

@@ -1,46 +1,31 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import Header from './components/Header';
-import Profile from './components/Profile';
-import CustomButton from './components/CustomButton';
+import React from 'react';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import HomeScreen from './components/HomeScreen';
+import TaskDetails from './components/TaskDetails';
 
-function App() {
-  const [greeting, setGreeting] = useState('');
+const Stack = createStackNavigator();
 
-  // Toggle greeting message when the button is clicked
-  const toggleGreeting = () => {
-    setGreeting(prev => (prev ? '' : 'Hello! Welcome to React Native'));
-  };
-
+export default function App() {
   return (
-    <View style={styles.container}>
-      <Header />
-      <View style={styles.content}>
-        <Profile name="John Doe" />
-        <CustomButton onPress={toggleGreeting} />
-        {greeting ? <Text style={styles.greeting}>{greeting}</Text> : null}
-      </View>
-    </View>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <NavigationContainer>
+        <Stack.Navigator
+          screenOptions={{
+            headerShown: false, // Disable default navigation headers
+          }}
+        >
+          <Stack.Screen 
+            name="Home" 
+            component={HomeScreen} 
+          />
+          <Stack.Screen 
+            name="TaskDetails" 
+            component={TaskDetails} 
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </GestureHandlerRootView>
   );
 }
-
-// Styles for dark mode
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#121212', // Dark background
-  },
-  content: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingTop: 100, // Prevent overlap with the header
-  },
-  greeting: {
-    marginTop: 20,
-    fontSize: 16,
-    color: '#BB86FC', // Purple accent for contrast
-  },
-});
-
-export default App;
